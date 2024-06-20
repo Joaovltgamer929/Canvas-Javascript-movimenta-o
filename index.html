@@ -1,1 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo</title>   
+</head>
+<body>
+    <canvas id="jogo" width="600" height="400" style="border: solid 1px black"></canvas>
+    <script>
+        var cnv = document.getElementById('jogo')
+        //Referência o objeto canvas através do identificador ID
+        cnv.style.background = 'linear-gradient(180deg, #0074D9, #48FCFF)'
+        //Define uma cor de fundo com efeito de gradiente
+        var ctx = cnv.getContext('2d')
+        //O método getContext()retorna um contexto de desenho no canvas, ou null se o contexto identificado não for suportado.        
+        
+        var rectX = 100;
+        var rectY = 200;
+        var rectLargura = 100;
+        var rectAltura = 40;
 
+        function desenhar() {
+            ctx.clearRect(0, 0, cnv.width, cnv.height)
+            ctx.fillRect(p1.x, p1.y, p1.largura, p1.altura)
+        }
+
+
+        window.addEventListener("keydown", ativaTeclaPrecionada)
+
+        var esquerda = 37
+        var cima = 38
+        var direita = 39
+        var baixo = 40
+
+        var p1 = {
+            x: 10,
+            y: 10,
+            largura: 50,
+            altura: 50
+        }
+
+
+        function ativaTeclaPrecionada(teclaPrecionada){
+            
+            var tecla = teclaPrecionada.keyCode
+            if(tecla === esquerda){
+                p1.x--
+            }
+            if(tecla === direita){
+                p1.x++
+            }
+            if(tecla === cima){
+                p1.y--
+            }    
+            if(tecla === baixo){
+                p1.y++
+            }   
+            desenhar()
+        }
+        desenhar()
+
+
+    </script>
+</body>
+</html>
