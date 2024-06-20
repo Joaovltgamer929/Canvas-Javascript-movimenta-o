@@ -8,58 +8,113 @@
 <body>
     <canvas id="jogo" width="600" height="400" style="border: solid 1px black"></canvas>
     <script>
-        var cnv = document.getElementById('jogo')
-        //Referência o objeto canvas através do identificador ID
-        cnv.style.background = 'linear-gradient(180deg, #0074D9, #48FCFF)'
-        //Define uma cor de fundo com efeito de gradiente
-        var ctx = cnv.getContext('2d')
-        //O método getContext()retorna um contexto de desenho no canvas, ou null se o contexto identificado não for suportado.        
-        
-        var rectX = 100;
-        var rectY = 200;
-        var rectLargura = 100;
-        var rectAltura = 40;
+        var cnv = document.getElementById('jogo');
+        var ctx = cnv.getContext('2d');
 
-        function desenhar() {
-            ctx.clearRect(0, 0, cnv.width, cnv.height)
-            ctx.fillRect(p1.x, p1.y, p1.largura, p1.altura)
-        }
-
-
-        window.addEventListener("keydown", ativaTeclaPrecionada)
-
-        var esquerda = 37
-        var cima = 38
-        var direita = 39
-        var baixo = 40
-
+        // Definição dos jogadores
         var p1 = {
             x: 10,
             y: 10,
             largura: 50,
-            altura: 50
-        }
+            altura: 50,
+            cor: '#FF4136' // Cor vermelha para jogador 1
+        };
 
+        var p2 = {
+            x: 200,
+            y: 200,
+            largura: 50,
+            altura: 50,
+            cor: '#2ECC40' // Cor verde para jogador 2
+        };
 
-        function ativaTeclaPrecionada(teclaPrecionada){
+        // Array de obstáculos
+        var obstaculos = [
+            { x: 300, y: 150, largura: 30, altura: 100 },
+            { x: 100, y: 300, largura: 80, altura: 20 }
+        ];
+
+        // Objeto objetivo
+        var objetivo = {
+            x: 400,
+            y: 50,
+            largura: 30,
+            altura: 30,
+            cor: '#FFDC00' // Cor amarela para o objetivo
+        };
+
+        // Função para desenhar tudo na tela
+        function desenhar() {
+            ctx.clearRect(0, 0, cnv.width, cnv.height);
             
-            var tecla = teclaPrecionada.keyCode
-            if(tecla === esquerda){
-                p1.x--
+            // Desenha jogador 1
+            ctx.fillStyle = p1.cor;
+            ctx.fillRect(p1.x, p1.y, p1.largura, p1.altura);
+            
+            // Desenha jogador 2
+            ctx.fillStyle = p2.cor;
+            ctx.fillRect(p2.x, p2.y, p2.largura, p2.altura);
+            
+            // Desenha obstáculos
+            ctx.fillStyle = '#AAAAAA'; // Cor cinza para obstáculos
+            for (var i = 0; i < obstaculos.length; i++) {
+                ctx.fillRect(obstaculos[i].x, obstaculos[i].y, obstaculos[i].largura, obstaculos[i].altura);
             }
-            if(tecla === direita){
-                p1.x++
-            }
-            if(tecla === cima){
-                p1.y--
-            }    
-            if(tecla === baixo){
-                p1.y++
-            }   
-            desenhar()
+            
+            // Desenha objetivo
+            ctx.fillStyle = objetivo.cor;
+            ctx.fillRect(objetivo.x, objetivo.y, objetivo.largura, objetivo.altura);
         }
-        desenhar()
 
+        // Função para atualizar a tela e limitar movimentos
+        function atualizar() {
+            desenhar();
+            // Limita movimento do jogador 1 dentro do canvas
+            p1.x = Math.max(0, Math.min(cnv.width - p1.largura, p1.x));
+            p1.y = Math.max(0, Math.min(cnv.height - p1.altura, p1.y));
+            // Limita movimento do jogador 2 dentro do canvas
+            p2.x = Math.max(0, Math.min(cnv.width - p2.largura, p2.x));
+            p2.y = Math.max(0, Math.min(cnv.height - p2.altura, p2.y));
+        }
+
+        // Evento de tecla pressionada para o jogador 1
+        window.addEventListener("keydown", function(teclaPrecionada) {
+            var tecla = teclaPrecionada.keyCode;
+            if (tecla === 65) { // Tecla A (esquerda)
+                p1.x--;
+            }
+            if (tecla === 68) { // Tecla D (direita)
+                p1.x++;
+            }
+            if (tecla === 87) { // Tecla W (cima)
+                p1.y--;
+            }
+            if (tecla === 83) { // Tecla S (baixo)
+                p1.y++;
+            }
+            atualizar();
+        });
+
+        // Evento de tecla pressionada para o jogador 2
+        window.addEventListener("keydown", function(teclaPrecionada) {
+            var tecla = teclaPrecionada.keyCode;
+            if (tecla === 37) { // Seta para a esquerda
+                p2.x--;
+            }
+            if (tecla === 39) { // Seta para a direita
+                p2.x++;
+            }
+            if (tecla === 38) { // Seta para cima
+                p2.y--;
+            }
+            if (tecla === 40) { // Seta para baixo
+                p2.y++;
+            }
+            atualizar();
+        });
+
+        // Inicializa o jogo chamando a função desenhar() pela primeira vez
+        desenhar();
 
     </script>
 </body>
